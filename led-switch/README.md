@@ -5,21 +5,43 @@ In this example you will learn how to control a LED using Solana Pay Transaction
 ## Hardware Required
 
 A Raspberry Pi with WiFi connection, a LED and a 220 ohm resistor.
+A 32 Gb mini sd card for the raspberry OS. 
 
 For example: 
 https://www.amazon.de/dp/B0C7KXMP7W?psc=1&ref=ppx_yo2ov_dt_b_product_details
 https://www.amazon.de/dp/B07WYX8M76?psc=1&ref=ppx_yo2ov_dt_b_product_details
 
+## Setup Raspberry
+
+Insert the SD card into your computer. 
+
+Install the Raspberry OS from here: https://www.raspberrypi.com/software/
+
+Make sure to add the correct wifi information and the user and password and enable SSH. Otherwise you will need a monitor to connect to it later. 
+Write the os onto the sd card with the Raspberry Pi imager and then put the sd card into the raspberry pi and connect it to a power source. 
+
+<img width="675" alt="Bildschirmfoto 2023-08-14 um 15 10 09" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/8001066f-b8d1-48e8-b84c-63bb716ad994">
+
+
 ## Quick blinking test
 
+Connect pin 18 to one side of the LED with a 220 Ohm resistor and pin 16 to the other side like so: 
+<img width="675" alt="Bildschirmfoto 2023-08-14 um 15 10 09" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/40c54dc3-565b-4917-ac93-112980c677c4">
+<img width="675" alt="Bildschirmfoto 2023-08-14 um 15 10 09" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/9f2dd570-4d91-4079-a508-555481faac4a">
+
+open terminal 
+
+```console 
 ping raspberrypi.local -> Copy ip address
 ssh yourUserName@TheCopiedIpAddress (ssh jonas@192.168.1.183)
 
 cd Documents 
 nano LED.py
+```
 
 Copy this in the File: 
 
+```python
 import RPi.GPIO as GPIO
 import time
 GPIO.setmode(GPIO.BCM)
@@ -30,6 +52,7 @@ GPIO.output(18,GPIO.HIGH)
 time.sleep(3)
 print ("LED off")
 GPIO.output(18,GPIO.LOW)
+```
 
 use ctrl +x to exit and y to save
 
@@ -43,42 +66,42 @@ If everything is set up correctly the LED should blink for 3 seconds.
 We want to use js so we can easily use the solana web3 library.
 
 1. Type the command:
-```
+```console
 sudo apt update
 ```
 
 2. Then, install Node.js with the command:
-```
+```console
 sudo apt install nodejs
 ```
 
 3. Confirm that the installation was successful by checking the available version:
-```
+```console
 nodejs -v
 ```
 
 4. Install the Node.js package manager (npm):
-```
+```console
 sudo apt install npm 
 ```
 
 5. Verify the installed version:
-```
+```console
 npm -v
 ```
 
 Install nvm: (https://github.com/nvm-sh/nvm)
 
-```
+```console
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
 ```
 
-```
+```console
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 ```
 
-```
+```console
 nvm install 16.19.1
 nvm use 16.19.1
 node --version
@@ -86,15 +109,16 @@ node --version
 
 ## Blink script in Node.js
 
-
+```console
 mkdir led
 cd led
 npm install onoff
 nano blink.js
+```
 
 Paste the following code in the file:
 
-```
+```js
 var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
 var LED = new Gpio(18, 'out'); //use GPIO pin 18, and specify that it is output
 var blinkInterval = setInterval(blinkLED, 250); //run the blinkLED function every 250ms
@@ -117,7 +141,7 @@ setTimeout(endBlink, 5000); //stop blinking after 5 seconds
 
 run it with:
 
-```
+```console
 sudo node blink.js
 ```
 
@@ -127,7 +151,7 @@ The program is a small anchor program which has a boolean which indicated if the
 Not that the program is not yet connected to the LED. We will do that later.
 Also the seed for the LED account is just a string, so everyone can call this function and switch it on or off. You could add a public key or any other string here to have only certain wallets able to switch the LED on or off.
 
-```
+```rust
 use anchor_lang::prelude::*;
 
 declare_id!("F7F5ZTEMU6d5Ac8CQEJKBGWXLbte1jK2Kodyu3tNtvaj");
@@ -178,22 +202,29 @@ Use scp or rsync to copy the files from the raspberry folder to the raspberry pi
 Notice that you need to copy the anchor types from the target folder to the raspberry folder whenever you do changes. (I didn't manage to get it to work without copying the files over to the led.ts file.) 
 
 Then maybe you need to install node types and type script. 
+
+```console
 npm install -D typescript
 npm install -D ts-node
+```
 
 Then you can run 
 
+```console
 npm i 
 and then run the script led.ts 
 npx ts-node led.ts
+```
 
 Don't run it with sudo. That gave me problems.
 You may need to change the rights of the directory to be able to write to it:
+```console
 chmod -R 777 /directory
+```
 
 Now the LED will already have the correct state that is in the LED account. Next we gonna change it via Solana Pay Transaction requests.
 
-```
+```js
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { IDL, LedSwitch } from "../target/types/led_switch";
@@ -264,11 +295,13 @@ Basically what is happening is that the wallet sends a get request to our API to
 
 To run the solana pay transaction request app use: 
 
+```console
 cd app
 yarn install
 yarn dev
+```
 
-open http://localhost:3000
+open http://localhost:3000 in your browser.
 Notice that the QR code is not working yet. We need to be able to access is from the distance. 
 For that we use ngrok to create a tunnel to our local server.
 Make an account and install ngrok https://ngrok.com/
@@ -279,6 +312,10 @@ Now the QR code should work and switch the LED on and off.
 
 Now you can also copy and print the QR codes and glue them somewhere next to the LED for example. 
 
+
+## Deploy 
+
+Since you dont want to run ngrok everytime it makes sense to deploy the app. Either on the raspberry itself or on for example vercel.com. 
 
 
 ## Where to go from here
