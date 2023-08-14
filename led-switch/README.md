@@ -2,12 +2,19 @@
 
 In this example you will learn how to control a LED using Solana Pay Transaction Requests. 
 
+
+
+https://github.com/solana-developers/solana-depin-examples/assets/5938789/784e851c-258d-4d5a-8508-dda90b22eb7f
+
+
+
 ## Hardware Required
 
 A Raspberry Pi with WiFi connection, a LED and a 220 ohm resistor.
 A 32 Gb mini sd card for the raspberry OS. 
 
 For example: 
+
 https://www.amazon.de/dp/B0C7KXMP7W?psc=1&ref=ppx_yo2ov_dt_b_product_details
 https://www.amazon.de/dp/B07WYX8M76?psc=1&ref=ppx_yo2ov_dt_b_product_details
 
@@ -20,14 +27,14 @@ Install the Raspberry OS from here: https://www.raspberrypi.com/software/
 Make sure to add the correct wifi information and the user and password and enable SSH. Otherwise you will need a monitor to connect to it later. 
 Write the os onto the sd card with the Raspberry Pi imager and then put the sd card into the raspberry pi and connect it to a power source. 
 
-<img width="675" alt="Bildschirmfoto 2023-08-14 um 15 10 09" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/8001066f-b8d1-48e8-b84c-63bb716ad994">
+<img width="675" alt="Bildschirmfoto 2023-08-14 um 15 10 09" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/98163c44-4de8-4366-82bd-dae89599ed6b">
 
 
 ## Quick blinking test
 
 Connect pin 18 to one side of the LED with a 220 Ohm resistor and pin 16 to the other side like so: 
-<img width="675" alt="Bildschirmfoto 2023-08-14 um 15 10 09" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/40c54dc3-565b-4917-ac93-112980c677c4">
-<img width="675" alt="Bildschirmfoto 2023-08-14 um 15 10 09" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/9f2dd570-4d91-4079-a508-555481faac4a">
+<img width="675" alt="Bildschirmfoto 2023-08-14 um 15 10 09" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/4d1ba27f-1f8d-46b8-9e1e-f5caed89c040">
+<img width="675" alt="Bildschirmfoto 2023-08-14 um 15 10 09" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/54918894-4d34-457b-b518-d8bc3c37a597">
 
 open terminal 
 
