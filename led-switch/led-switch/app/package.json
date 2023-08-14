@@ -14,6 +14,7 @@
     "@next/font": "13.1.2",
     "@solana/pay": "^0.2.4",
     "@solana/spl-token": "^0.3.7",
+    "@coral-xyz/anchor": "0.28.0",
     "@solana/wallet-adapter-react": "^0.15.28",
     "@solana/wallet-adapter-react-ui": "^0.9.27",
     "@solana/wallet-adapter-wallets": "^0.19.11",
