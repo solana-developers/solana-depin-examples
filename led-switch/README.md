@@ -341,29 +341,25 @@ Have fun and let me know what you build with it!
 
 ### Optional step: auto start the script on boot (WIP)
 
-Im still having some problems running ts-node as sudo. Still WIP.
-
 Here are three ways on how to start the script on boot:
 https://www.makeuseof.com/how-to-run-a-raspberry-pi-program-script-at-startup/
 
 I went for step 2 the cron job since it didnt want to risk there being problems during the startup.
 
-So I opened the ron config like so: 
-```
-```
-and added this line: 
+First I created a start.sh file:
 ```
 nano /home/jonas/Documents/led-switch/led-switch/raspberry/start.sh
 add 
 npx ts-node /home/jonas/Documents/led-switch/led-switch/raspberry/led.ts
+then run
 chmod +x /home/jonas/Documents/led-switch/led-switch/raspberry/start.sh
 ```
 
 Then I added this line to the cron config: 
 
 ```
-sudo crontab -e
-@reboot sleep 5 && /home/jonas/Documents/led-switch/led-switch/raspberry/start.sh &
+crontab -e
+@reboot sleep 10 && /home/jonas/Documents/led-switch/led-switch/raspberry/start.sh &
 ```
 
 To enable cron logs 
@@ -383,9 +379,10 @@ Now you can check the logs with
 sudo cat /var/log/cron.log
 ```
 Now reboot the raspberry and check if the LED is turning on. (Make sure the program state is set to true ;) )
-
 ```
 sudo reboot
 ```
+
+
 
 
