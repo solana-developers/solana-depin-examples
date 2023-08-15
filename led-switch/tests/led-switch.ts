@@ -4,7 +4,6 @@ import { LedSwitch } from "../target/types/led_switch";
 import { assert } from "chai";
 
 describe("led-switch", () => {
-  // Configure the client to use the local cluster.
   anchor.setProvider(anchor.AnchorProvider.env());
 
   const program = anchor.workspace.LedSwitch as Program<LedSwitch>;
@@ -18,9 +17,11 @@ describe("led-switch", () => {
       ],
       program.programId,
     )[0];
+    
     console.log("Led switch pda", ledSwitchPDA);
+
     try {
-      const tx = await program.methods.initialize().accounts(
+      const initializeTransaction = await program.methods.initialize().accounts(
         {
           ledSwitch: ledSwitchPDA,
           authority: wallet.publicKey,
@@ -28,24 +29,23 @@ describe("led-switch", () => {
           rent: anchor.web3.SYSVAR_RENT_PUBKEY,
         },
       ).rpc();
-      console.log("Your transaction signature", tx);
+      console.log("Initialize transaction signature: ", initializeTransaction);
     } catch (e) {
       console.log(e);
     }
 
-    const tx2 = await program.methods.switch(true).accounts(
+    const switchOnTransaction = await program.methods.switch(true).accounts(
       {
         ledSwitch: ledSwitchPDA,
         authority: wallet.publicKey
       },
     ).rpc();
 
-    const gameDataAccount = await program.account.ledSwitch.fetch(
+    const ledAccount = await program.account.ledSwitch.fetch(
       ledSwitchPDA
     )
+    console.log("Your switch on transaction signature", switchOnTransaction);
 
-    assert(gameDataAccount.isOn === true, "Game data account is not initialized correctly")
-
-    console.log("Your transaction signature", tx2);
+    assert(ledAccount.isOn === true, "Game data account is not initialized correctly. Should be on/true")
   });
 });

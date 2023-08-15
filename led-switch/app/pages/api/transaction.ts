@@ -1,7 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { PublicKey, Transaction } from '@solana/web3.js';
-import { createSwitchOnInstruction } from '@/src/util/move';
 import { CONNECTION, LED_SWITCH_PDA, LED_SWITCH_PROGRAM } from '@/src/util/const';
 
 type POST = {
@@ -73,7 +72,7 @@ const post = async (req: NextApiRequest, res: NextApiResponse<POST>) => {
     
     transaction.add(ix);
     
-    message = 'Switched on!';
+    message = 'Switch on!';
   } else if (instructionField == "switch_off") {
     let ix = await LED_SWITCH_PROGRAM.methods.switch(false).accounts(
       {
@@ -83,9 +82,9 @@ const post = async (req: NextApiRequest, res: NextApiResponse<POST>) => {
     ).instruction();
     
     transaction.add(ix);
-    message = 'switch off !';
+    message = 'Switch off !';
   } else {
-    message = 'Unknown direction';
+    message = 'Unknown instruction';
   }
  
   // Serialize and return the unsigned transaction.

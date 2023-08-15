@@ -10,13 +10,15 @@ https://github.com/solana-developers/solana-depin-examples/assets/5938789/784e85
 
 ## Hardware Required
 
-A Raspberry Pi with WiFi connection, a LED and a 220 ohm resistor.
+A Raspberry Pi 4B with WiFi connection, a LED and a 220 ohm resistor.
 A 32 Gb mini sd card for the raspberry OS. 
 
 For example: 
 
-https://www.amazon.de/dp/B0C7KXMP7W?psc=1&ref=ppx_yo2ov_dt_b_product_details
-https://www.amazon.de/dp/B07WYX8M76?psc=1&ref=ppx_yo2ov_dt_b_product_details
+https://www.amazon.de/dp/B0C7KXMP7W
+https://www.amazon.de/dp/B07WYX8M76
+
+There maybe cheaper and better options. This is an example, any Raspberry 4b and any starter kit with a LED and a resistor will do. Probably a raspberry nano/pico or similar would also work.
 
 ## Setup Raspberry
 
@@ -70,7 +72,7 @@ If everything is set up correctly the LED should blink for 3 seconds.
 
 ## Install Node on the Raspberry Pi:
 
-We want to use js so we can easily use the solana web3 library.
+We want to use js so we can easily use the Solana web3 library.
 
 1. Type the command:
 ```console
@@ -206,7 +208,7 @@ pub struct LedSwitch {
 
 Use scp or rsync to copy the files from the raspberry folder to the raspberry pi.
 (If you have problems coping files like i had you can also use VNC Viewer to copy the files.)
-Notice that you need to copy the anchor types from the target folder to the raspberry folder whenever you do changes. (I didn't manage to get it to work without copying the files over to the led.ts file.) 
+Notice that you need to copy the anchor types from the target folder to the raspberry folder whenever you do changes. (I didn't manage to get it to work without copying the types file over next to the led.ts file.) 
 
 Then maybe you need to install node types and type script. 
 
@@ -322,7 +324,7 @@ Now you can also copy and print the QR codes and glue them somewhere next to the
 
 ## Deploy 
 
-Since you dont want to run ngrok everytime it makes sense to deploy the app. Either on the raspberry itself or on for example vercel.com. 
+Since you don't want to run ngrok every time it makes sense to deploy the app. Either on the raspberry itself or on for example vercel.com. 
 
 
 ## Where to go from here
@@ -344,44 +346,56 @@ Have fun and let me know what you build with it!
 Here are three ways on how to start the script on boot:
 https://www.makeuseof.com/how-to-run-a-raspberry-pi-program-script-at-startup/
 
-I went for step 2 the cron job since it didnt want to risk there being problems during the startup.
+I went for step 2 the cron job since it didn't want to risk there being problems during the startup.
 
 First I created a start.sh file:
-```
+```bash
 nano /home/jonas/Documents/led-switch/led-switch/raspberry/start.sh
+```
 add 
+```bash
 npx ts-node /home/jonas/Documents/led-switch/led-switch/raspberry/led.ts
+```
 then run
+```bash
 chmod +x /home/jonas/Documents/led-switch/led-switch/raspberry/start.sh
 ```
 
 Then I added this line to the cron config: 
 
-```
+```bash
 crontab -e
 @reboot sleep 10 && /home/jonas/Documents/led-switch/led-switch/raspberry/start.sh &
 ```
 
 To enable cron logs 
-```
+```bash
 sudo nano /etc/rsyslog.conf
 ```
 and uncomment the line 
-```
+```bash
 # cron.*                          /var/log/cron.log
 ```
 Then restart the service
-```
+```bash
 sudo service rsyslog restart
 ```
 Now you can check the logs with 
-```
+```bash
 sudo cat /var/log/cron.log
 ```
 Now reboot the raspberry and check if the LED is turning on. (Make sure the program state is set to true ;) )
-```
+```bash
 sudo reboot
 ```
+
+If you get error saying that the package crypto is not available its probably because your sude node version is too low.
+You can check the node version with 
+```bash
+sudo node -v
+```
+Update it as described above just using sudo command. 
+
 
 
 

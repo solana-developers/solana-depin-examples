@@ -1,6 +1,6 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
-import { IDL, LedSwitch } from "../target/types/led_switch";
+import { IDL, LedSwitch } from "./led_switch";
 import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js";
 import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet";
 
