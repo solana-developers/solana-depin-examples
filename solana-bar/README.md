@@ -1,9 +1,11 @@
 # Solana Bar 
 
 Project name Dionysos.  
-Example that shows how you can sell liquids via Solana Pay. 
+Example that shows how you can sell wine or and other liquids via Solana Pay transaction requests qr codes. 
 Dionysos was the god of wine, fertility, ritual madness, religious ecstasy, and theatre in ancient Greek religion and myth. 
 He would have loved this project. 
+
+![IMG_2731](https://github.com/solana-developers/solana-depin-examples/assets/5938789/29bc21c9-1428-4252-93a6-a12c85b8260a)
 
 
 ## Prerequisites
@@ -49,7 +51,18 @@ See [<LED-SWITCH-EXAMPLE>
 ](https://github.com/solana-developers/solana-depin-examples/blob/main/led-switch/README.md)
  for the complete setup of the PI including node and typescript.
 
-## The program
+## Power supply 
+
+The water pump may have come with a relay. That is not really needed though. You can just use the power supply of the raspberry pi. 
+We use a NPN Transistor from the Raspberry pi starter kit. (S8050 D331 the one with the little H on it) Attach the left side, the collector, to ground pin which is pin number three on the right side. Then the positive part to the collector of the transistor. Then you attach GPIO 23 via a resistor to the base of the transistor. 
+What is happening here is that the GPIO pin will be loaded positive as soon as the GPIO pin is activated in our ts code. This basically makes the transistor conductive and the power can freely flow from plus to ground through the pump which makes it pump. 
+
+![IMG_2733](https://github.com/solana-developers/solana-depin-examples/assets/5938789/c2972057-4e68-47a3-aaf4-538686c5ae03)
+![IMG_2735](https://github.com/solana-developers/solana-depin-examples/assets/5938789/d09fe43a-6792-432f-8483-bce2c36d4c5d)
+
+This is already the whole setup we need. Now just find a nice spot for your pump and attach the raspberry with a power bank so its looks like the wine is controlled by magic. 
+
+## The anchor program
 
 The program is written in Rust using the Anchor framework.
 It consists of two parts. The first part is the program that runs on the blockchain and the second part is the program that runs on the raspberry pi.
