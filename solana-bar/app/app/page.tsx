@@ -1,6 +1,6 @@
 'use client'; // this makes next know that this page should be rendered in the client
 import { useEffect, useState } from 'react';
-import { CONNECTION, SOLANA_BAR_PROGRAM_ID, SOLANA_BAR_PROGRAM, RECEIPTS_PDA } from '@/src/util/const';
+import { CONNECTION, SOLANA_BAR_PROGRAM, RECEIPTS_PDA } from '@/src/util/const';
 import PayQR from '@/src/components/PayQR';
 import Receipts from '@/src/components/Receipts';
 
@@ -65,7 +65,7 @@ export default function Home() {
               {!receipts && (
                 <PayQR instruction={"initialize"} />
               )}
-              
+
               <Receipts receipts = {receipts} ></Receipts>
                   
             </li>

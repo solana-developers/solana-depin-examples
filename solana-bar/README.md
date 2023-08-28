@@ -10,7 +10,8 @@ He would have loved this project.
 
 If you have not worked with raspberry pi before its highly recommended to do the LED-switch example first for the complete setup of the PI including node and typescript.
 Here is the link: 
-<LINK TO LED-SWITCH EXAMPLE>
+[<LED-SWITCH-EXAMPLE>
+](https://github.com/solana-developers/solana-depin-examples/blob/main/led-switch/README.md)
 
 
 ## Hardware Required
@@ -37,18 +38,26 @@ https://www.amazon.de/dp/B07TQ6TP55
 
 ## Setup Raspberry
 
-See <LED-SWITCH EXAMPLE> for the complete setup of the PI including node and typescript.
+See [<LED-SWITCH-EXAMPLE>
+](https://github.com/solana-developers/solana-depin-examples/blob/main/led-switch/README.md)
+ for the complete setup of the PI including node and typescript.
 
 
 ## Install Node on the Raspberry Pi:
 
-See <LED-SWITCH EXAMPLE> for the complete setup of the PI including node and typescript.
+See [<LED-SWITCH-EXAMPLE>
+](https://github.com/solana-developers/solana-depin-examples/blob/main/led-switch/README.md)
+ for the complete setup of the PI including node and typescript.
 
 ## The program
 
-The program is a small anchor program which has a boolean which indicated if the LED should be on or off.
-Not that the program is not yet connected to the LED. We will do that later.
-Also the seed for the LED account is just a string, so everyone can call this function and switch it on or off. You could add a public key or any other string here to have only certain wallets able to switch the LED on or off.
+The program is written in Rust using the Anchor framework.
+It consists of two parts. The first part is the program that runs on the blockchain and the second part is the program that runs on the raspberry pi.
+The program has a function to buy a shot and a function to mark the shot as delivered.
+When scanning the QR code a transaction request is created that calls the buy shot function by signing a transaction on the users mobile wallet. 
+When the raspberry pi receives the transaction request it will turn on the pump and wait for a certain amount of time. 
+Then it will call the mark shot as delivered function.
+This program can be easily expanded to have multiple pumps and multiple drinks. The recieps can be used to track how much was sold for accounting. 
 
 ```rust
 use anchor_lang::solana_program::native_token::LAMPORTS_PER_SOL;
@@ -118,7 +127,7 @@ pub mod solana_bar {
         Ok(())
     }
 
-    // This instruction will be called from the raspberry pi as soon as he is done purring the drink.
+    // This instruction will be called from the raspberry pi as soon as he is done purring the drink. For the very unlikely case that an attacker wants to mark a shot as delivered here a signer check could be added. 
     pub fn mark_shot_as_delivered(ctx: Context<MarkShotAsDelivered>, recipe_id: u64) -> Result<()> {
         for i in 0..ctx.accounts.receipts.receipts.len() {
             if ctx.accounts.receipts.receipts[i].receipt_id == recipe_id {
@@ -177,103 +186,208 @@ pub struct Receipt {
 
 ```
 
-## Now we want to listen to the account via websocket and trigger the LED
+## Raspberry PI script setup
 
-Use scp or rsync to copy the files from the raspberry folder to the raspberry pi.
-(If you have problems coping files like i had you can also use VNC Viewer to copy the files.)
-Notice that you need to copy the anchor types from the target folder to the raspberry folder whenever you do changes. (I didn't manage to get it to work without copying the types file over next to the led.ts file.) 
+See [<LED-SWITCH-EXAMPLE>
+](https://github.com/solana-developers/solana-depin-examples/blob/main/led-switch/README.md)
 
-Then maybe you need to install node types and type script. 
 
-```console
-npm install -D typescript
-npm install -D ts-node
-```
+## Raspberry PI script
 
-Then you can run 
+The script is written in typescript and uses the anchor framework to interact with the blockchain. Make sure you copy the solana_bar types script next to the bar.ts script to be able to interact with the anchor program. 
 
-```console
-npm i 
-and then run the script led.ts 
-npx ts-node led.ts
-```
+This script is loading the receipts account and starts purring all drink that are not delivered yet. Then it starts listening to the receipts account and purrs drinks as they are being bought. 
 
-Don't run it with sudo. That gave me problems.
-You may need to change the rights of the directory to be able to write to it:
-```console
-chmod -R 777 /directory
-```
+To purr a drink it activates GPIO 23 which is connected to a transistor is connected to a 5V line which is connected to the pump. The time to purr could be adjusted by adding a field for purr time for different drinks into the receipt account for example. 
 
-Now the LED will already have the correct state that is in the LED account. Next we gonna change it via Solana Pay Transaction requests.
+After the drink is purred the script uses a hardcoded keypair to mark the drink as delivered. 
+
 
 ```js
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
-import { IDL, LedSwitch } from "../target/types/led_switch";
+import { IDL, SolanaBar } from "./solana_bar";
 import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js";
-import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet";
 
 var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
-var LED = new Gpio(18, 'out'); //use GPIO pin 18, and specify that it is output
+var GPIO_23 = new Gpio(23, 'out'); //use GPIO pin 18, and specify that it is output
 
 let connection = new Connection(clusterApiUrl("devnet"));
-let wallet = new NodeWallet(new Keypair());
+
+// Replace this with your own keypair to be able to pay for fees to mark drinks a delivered.
+const keypair = Keypair.fromSecretKey(
+  Uint8Array.from([209,70,174,212,192,159,166,82,163,162,135,190,244,227,218,97,214,155,228,142,172,188,170,246,130,68,106,45,170,125,175,57,12,253,44,189,234,23,239,220,85,57,231,86,130,27,99,62,106,215,172,104,152,104,145,138,198,105,218,20,232,251,238,250])
+);
+
+// Or load from File: 
+/*const keypair = new Uint8Array(
+  JSON.parse(
+    fs.readFileSync("shoUzmg5H2zDdevxS6UdQCiY6JnP1qSn7fPtCP726pR.json").toString())
+  );
+  let keyPair = Keypair.fromSecretKey(decodedKey);
+*/
+
+let wallet = new anchor.Wallet(keypair);
 const provider = new anchor.AnchorProvider(connection, wallet, {
-  commitment: "processed",
+  commitment: "confirmed",
 });
 anchor.setProvider(provider);
 
-const program = new Program<LedSwitch>(IDL, "F7F5ZTEMU6d5Ac8CQEJKBGWXLbte1jK2Kodyu3tNtvaj", { connection })
+const program = new Program<SolanaBar>(IDL, "GCgyx9JPNpqX97iWQh7rqPjaignahkS8DqQGdDdfXsPQ", { connection })
 
 console.log("Program ID", program.programId.toString());
 
 startListeningToLedSwitchAccount();
 
 async function startListeningToLedSwitchAccount() {
-    const ledSwitchPDA = await anchor.web3.PublicKey.findProgramAddressSync(
+    const receiptsPDA = await anchor.web3.PublicKey.findProgramAddressSync(
         [
-          Buffer.from("led-switch"),
+          Buffer.from("receipts"),
         ],
         program.programId,
       )[0];
 
-    const ledSwitchAccount = await program.account.ledSwitch.fetch(
-        ledSwitchPDA
+    const receiptsAccount = await program.account.receipts.fetch(
+        receiptsPDA
     )
 
-    console.log(JSON.stringify(ledSwitchAccount));
-    console.log("Led is: ", ledSwitchAccount.isOn);
-    if (ledSwitchAccount.isOn) {
-      LED.writeSync(1);
-    } else {
-      LED.writeSync(0);
+    console.log("Receipts account", JSON.stringify(receiptsAccount));
+
+    for (let i = 0; i < receiptsAccount.receipts.length; i++) {
+      const receipt = receiptsAccount.receipts[i];
+      if (!receipt.wasDelivered) {
+        await PourShotAndMarkAsDelivered(receipt);
+        console.log("Receipt", JSON.stringify(receipt));
+        break;
+      }
     }
     
-    connection.onAccountChange(ledSwitchPDA, (account) => {
+    GPIO_23.writeSync(0);
+    
+    connection.onAccountChange(receiptsPDA, async (account) => {
         const decoded = program.coder.accounts.decode(
-            "ledSwitch",
+            "receipts",
             account.data
           )
 
-          if (decoded.isOn) {
-            LED.writeSync(1);
-          } else {
-            LED.writeSync(0);
+          for (let i = 0; i < decoded.receipts.length; i++) {
+            const receipt = decoded.receipts[i];
+            if (!receipt.wasDelivered) {
+              await PourShotAndMarkAsDelivered(receipt);
+              break;
+            }
           }
-        console.log("Account changed. Led is: ", decoded.isOn);
-    }, "processed")
-};
-```
 
-Now the LED will always show the state of the LED account. Next we gonna change the state of the LED account via Solana Pay Transaction requests.
+        console.log("Shot given out.");
+    }, "confirmed")
+
+  async function PourShotAndMarkAsDelivered(receipt: { receiptId: anchor.BN; buyer: anchor.web3.PublicKey; wasDelivered: boolean; price: anchor.BN; timestamp: anchor.BN; }) {
+    console.log("start purring receipt id: " + receipt.receiptId.toString());
+    
+    GPIO_23.writeSync(1);
+    await sleep(3000);
+    GPIO_23.writeSync(0);
+
+    console.log("done purring: " + receipt.receiptId.toString());
+
+    let ix = await program.methods.markShotAsDelivered(receipt.receiptId).accounts(
+      {
+        receipts: receiptsPDA,
+        signer: wallet.publicKey,
+      }).transaction();
+
+      console.log("ix", JSON.stringify(ix));
+      ix.feePayer = wallet.publicKey;
+      var signature = await connection.sendTransaction(ix, [keypair], {skipPreflight: true});
+
+      console.log("Sent receipt mark as delivered: ", signature);
+  }
+  
+  function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+  }
+};
+
+```
 
 ## Create a Solana Pay Transaction Request
 
 Solana Pay is not only for payments, but can request any transaction to be signed. 
 The transaction can be signed by any wallet that supports Solana Pay. 
-It consists of two parts. The api which can be found in led-switch/app/pages/api/transaction.ts and the creation of the QR code which can be found in led-switch/app/app/page.tsx and the QrCode in led-switch/app/app/components/qr-code.tsx. 
+It consists of two parts. 
+The api which can be found in solana-bar/app/pages/api/transaction.ts 
 
-Basically what is happening is that the wallet sends a get request to our API to get a name and icon and then the transaction is created in the nextJS api and send to the wallet. The wallet then signs it. When the transaction is confirmed the LED account is updated and since on the raspberry pi we have a websocket connection to that account the LED turns on or off.
+```js
+if (instructionField == "buy_shot") {
+    let ix = await SOLANA_BAR_PROGRAM.methods.buyShot().accounts(
+      {
+      receipts: RECEIPTS_PDA,
+      signer: sender,
+      treasury: new PublicKey("BRWrkVaTTyq3eRJw4t8YjkJuH9EtnoVeyeQ4A3eDqU86"),
+      systemProgram: PublicKey.default,
+      },
+    ).instruction();
+    
+    transaction.add(ix);
+    
+    message = 'Buy 4 cl drink!';
+  } else {
+    message = 'Unknown instruction';
+  }
+```
+
+and the creation of the QR code which can be found in 
+solana-ar/app/app/page.tsx 
+
+```js
+  {receipts != null && (
+    <PayQR instruction={"buy_shot"} />
+  )}
+```
+
+and the QrCode in solan-bar/app/app/components/qr-code.tsx. 
+
+```js
+const queryBuilder = (baseUrl: string, params: string[][]) => {
+  let url = baseUrl + '?';
+  params.forEach((p, i) => url += p[0] + '=' + p[1] + (i != params.length - 1 ? '&' : ''));
+  console.log(url)
+  return url;
+}
+
+const PayQR: FC<TransactionRequestQRProps> = (
+  { instruction }
+) => {
+  const qrRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const params = [
+      ['instruction', instruction],
+    ];
+
+    const apiUrl = queryBuilder(
+      `${window.location.protocol}//${window.location.host}/api/transaction`,
+      params,
+    );
+
+    const qr = createQR(
+      encodeURL({ link: new URL(apiUrl) }),
+      360,
+      'transparent'
+    );
+
+    qr.update({ backgroundOptions: { round: 1000 } });
+    qr.update({ type: 'canvas' });
+
+    if (qrRef.current != null) {
+      qrRef.current.innerHTML = '';
+      qr.append(qrRef.current)
+    }
+
+  }, [])
+```
+
+Basically what is happening is that the wallet sends a get request to our API to get a name and icon and then the transaction is created in the nextJS api and send to the wallet. The wallet then signs it. When the transaction is confirmed the new receipt is written into the receipt account is updated and since on the raspberry pi we have a websocket connection to that account the raspberry can start purring the drink. After he is done he will mark the drink as delivered. So like this we can make sure that the drink is only purred when the transaction is confirmed. In case of hardware errors we can issue a refund. 
 
 To run the solana pay transaction request app use: 
 
@@ -290,84 +404,29 @@ Make an account and install ngrok https://ngrok.com/
 open a terminal and type:
 ngrok http 3000  
 Then copy the url from the terminal and open it in the browser.
-Now the QR code should work and switch the LED on and off. 
+Now the QR code should work and scanning the QR code will start the pump. 
 
-Now you can also copy and print the QR codes and glue them somewhere next to the LED for example. 
+Now you can also copy and print the QR codes and glue them somewhere next to our Solana Bar for example. 
 
 
 ## Deploy 
 
-Since you don't want to run ngrok every time it makes sense to deploy the app. Either on the raspberry itself or on for example vercel.com. 
+Since you don't want to run ngrok every time it makes sense to deploy the app. Either on the raspberry itself or on for example vercel.com which is very convenient since you can directly deploy it from the github repository. 
 
 
 ## Where to go from here
 
+Good additions would be to add a field for purr duration on the receipt account and to add a moisture sensor to check if there is still liquid in the container.
 
-Now you just need imagination to think of what you can do with this.
-For example you could create a game where you have to scan the QR code to switch the LED on and off or control switches and ramps for marbles.
-Or you could use a lock to open a door. Or even only open it when there is certain NFT in that wallet. 
-Or you could use it to water plants or feed a hamster during a live stream. 
-Or attach it to a car which can be controlled by the audience.
+Build a nice case for it to hide the magic and shock your friends.
 
-Have fun and let me know what you build with it! 
+You can now also power the raspberry pi with a power bank and take it with you to the beach or a party and sell drinks there. You may want to connect it to your phones hotspot in that case.
 
 
+### Optional step: auto start the script on boot
 
-
-### Optional step: auto start the script on boot (WIP)
-
-Here are three ways on how to start the script on boot:
-https://www.makeuseof.com/how-to-run-a-raspberry-pi-program-script-at-startup/
-
-I went for step 2 the cron job since it didn't want to risk there being problems during the startup.
-
-First I created a start.sh file:
-```bash
-nano /home/jonas/Documents/led-switch/led-switch/raspberry/start.sh
-```
-add 
-```bash
-npx ts-node /home/jonas/Documents/led-switch/led-switch/raspberry/led.ts
-```
-then run
-```bash
-chmod +x /home/jonas/Documents/led-switch/led-switch/raspberry/start.sh
-```
-
-Then I added this line to the cron config: 
-
-```bash
-crontab -e
-@reboot sleep 10 && /home/jonas/Documents/led-switch/led-switch/raspberry/start.sh &
-```
-
-To enable cron logs 
-```bash
-sudo nano /etc/rsyslog.conf
-```
-and uncomment the line 
-```bash
-# cron.*                          /var/log/cron.log
-```
-Then restart the service
-```bash
-sudo service rsyslog restart
-```
-Now you can check the logs with 
-```bash
-sudo cat /var/log/cron.log
-```
-Now reboot the raspberry and check if the LED is turning on. (Make sure the program state is set to true ;) )
-```bash
-sudo reboot
-```
-
-If you get error saying that the package crypto is not available its probably because your sude node version is too low.
-You can check the node version with 
-```bash
-sudo node -v
-```
-Update it as described above just using sudo command. 
+[<LED-SWITCH-EXAMPLE>
+](https://github.com/solana-developers/solana-depin-examples/blob/main/led-switch/README.md)
 
 
 
