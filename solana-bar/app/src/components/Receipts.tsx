@@ -10,7 +10,7 @@ const PayQR: FC<any> = (
 
     <div className='bg-white shadow-md rounded-2xl border-solid border border-black w-auto text-center flex flex-col mx-auto'>
           <p>Receipts:</p>
-          {receipts && receipts.receipts.map(receipt =>
+          {receipts && receipts.receipts.map((receipt: any) =>
                         <tr key={receipt.receiptId}>
                             <td>{receipt.receiptId.toString()}</td>
                             <td>{receipt.wasDelivered ? "Done: " : "Pending: "}</td>
