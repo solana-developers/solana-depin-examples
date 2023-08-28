@@ -12,7 +12,7 @@ He would have loved this project.
 
 If you have not worked with raspberry pi before its highly recommended to do the LED-switch example first for the complete setup of the PI including node and typescript.
 Here is the link: 
-[<LED-SWITCH-EXAMPLE>
+[LED-SWITCH-EXAMPLE
 ](https://github.com/solana-developers/solana-depin-examples/blob/main/led-switch/README.md)
 
 
@@ -40,14 +40,14 @@ https://www.amazon.de/dp/B07TQ6TP55
 
 ## Setup Raspberry
 
-See [<LED-SWITCH-EXAMPLE>
+See [LED-SWITCH-EXAMPLE
 ](https://github.com/solana-developers/solana-depin-examples/blob/main/led-switch/README.md)
  for the complete setup of the PI including node and typescript.
 
 
 ## Install Node on the Raspberry Pi:
 
-See [<LED-SWITCH-EXAMPLE>
+See [LED-SWITCH-EXAMPLE
 ](https://github.com/solana-developers/solana-depin-examples/blob/main/led-switch/README.md)
  for the complete setup of the PI including node and typescript.
 
@@ -201,7 +201,7 @@ pub struct Receipt {
 
 ## Raspberry PI script setup
 
-See [<LED-SWITCH-EXAMPLE>
+See [LED-SWITCH-EXAMPLE
 ](https://github.com/solana-developers/solana-depin-examples/blob/main/led-switch/README.md)
 
 
@@ -438,7 +438,7 @@ You can now also power the raspberry pi with a power bank and take it with you t
 
 ### Optional step: auto start the script on boot
 
-[<LED-SWITCH-EXAMPLE>
+[LED-SWITCH-EXAMPLE
 ](https://github.com/solana-developers/solana-depin-examples/blob/main/led-switch/README.md)
 
 
