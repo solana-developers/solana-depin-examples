@@ -13,5 +13,5 @@ It comes with a full walkthrough from start to finish. Setting up the Raspberry 
 ### [Solana-bar](./solana-bar/README.md)
 
 This example shows how to use Solana Pay transaction requests to sell liquids decentralized using a 5V pump.
-It comes with a full walkthrough from start to finish. Hardware requirements, how to attach the cables and the full scource code. 
+It comes with a full walkthrough from start to finish. Hardware requirements, how to attach the cables and the full source code. 
 Take the liquid dispenser to the beach or a party and start selling holy water to your friends.
