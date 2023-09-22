@@ -15,7 +15,7 @@ pub enum ShotErrorCode {
 pub mod solana_bar {
 
     use super::*;
-    const SHOT_PRICE: u64 = LAMPORTS_PER_SOL / 10; // 0.1 SOL
+    const SHOT_PRICE: u64 = LAMPORTS_PER_SOL / 100; // 0.01 SOL
 
     pub fn initialize(_ctx: Context<Initialize>) -> Result<()> {
         Ok(())

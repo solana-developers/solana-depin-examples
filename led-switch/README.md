@@ -27,10 +27,17 @@ Insert the SD card into your computer.
 Install the Raspberry OS from here: https://www.raspberrypi.com/software/
 
 Make sure to add the correct wifi information and the user and password and enable SSH. Otherwise you will need a monitor to connect to it later. 
+
 Write the os onto the sd card with the Raspberry Pi imager and then put the sd card into the raspberry pi and connect it to a power source. 
 
 <img width="675" alt="Bildschirmfoto 2023-08-14 um 15 10 09" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/98163c44-4de8-4366-82bd-dae89599ed6b">
 
+### optional switch wifi access via ethernet cable
+
+If you did not setup the wifi password in the setup you can also connect the raspberry pi via lan cable to your router and then ssh into it. This is also helpful if you want to connect to it from a different network if you move somewhere else. 
+- Connect your computer via lan cable to the raspberry pi (Probably need a connector from usb-c to lan)
+- ssh jonas@raspberrypi.local
+- sudo raspi-config and change under system -> wifi to the new wifi network by adding the SSID and the password
 
 ## Quick blinking test
 
