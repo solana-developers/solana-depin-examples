@@ -18,7 +18,7 @@ For example:
 https://www.amazon.de/dp/B0C7KXMP7W
 https://www.amazon.de/dp/B07WYX8M76
 
-There maybe cheaper and better options. This is an example, any Raspberry 4b and any starter kit with a LED and a resistor will do. Probably a raspberry nano/pico or similar would also work.
+There may be cheaper and better options. This is an example, any Raspberry 4b and any starter kit with a LED and a resistor will do. Probably a raspberry nano/pico or similar would also work.
 
 ## Setup Raspberry
 
@@ -214,7 +214,7 @@ pub struct LedSwitch {
 ## Now we want to listen to the account via websocket and trigger the LED
 
 Use scp or rsync to copy the files from the raspberry folder to the raspberry pi.
-(If you have problems coping files like i had you can also use VNC Viewer to copy the files.)
+(If you have problems coping files like I had you can also use VNC Viewer to copy the files.)
 Notice that you need to copy the anchor types from the target folder to the raspberry folder whenever you do changes. (I didn't manage to get it to work without copying the types file over next to the led.ts file.) 
 
 Then maybe you need to install node types and type script. 
@@ -396,7 +396,7 @@ Now reboot the raspberry and check if the LED is turning on. (Make sure the prog
 sudo reboot
 ```
 
-If you get error saying that the package crypto is not available its probably because your sude node version is too low.
+If you get error saying that the package crypto is not available it's probably because your sude node version is too low.
 You can check the node version with 
 ```bash
 sudo node -v

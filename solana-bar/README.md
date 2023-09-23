@@ -25,7 +25,7 @@ If you want to run the bar anywhere, you also need a power bank to power the ras
 - Raspberry Pi 4B (or similar) with WiFi connection
 - 5V Water pump
 - 220 Ohm resistor (is part of the raspberry starter kit)
-- NPN transistor (S8050 D331, is part of the raspberry starter kit. Its the one with the little H on the back)
+- NPN transistor (S8050 D331, is part of the raspberry starter kit. It's the one with the little H on the back)
 - 32 Gb mini sd card
 - Power bank (optional)
 
@@ -33,7 +33,7 @@ For example:
 
 https://www.amazon.de/dp/B0C7KXMP7W
 https://www.amazon.de/dp/B07WYX8M76
-There maybe cheaper and better options for these two. This is an example, any Raspberry 4b and any starter kit with a LED and a resistor will do. Probably a raspberry nano/pico or similar would also work.
+There may be cheaper and better options for these two. This is an example, any Raspberry 4b and any starter kit with a LED and a resistor will do. Probably a raspberry nano/pico or similar would also work.
 
 Pump + moisture sensor (Sensor is not used in this example, but you could use it to check if there is still liquid in the container):
 https://www.amazon.de/dp/B07TQ6TP55
@@ -60,7 +60,7 @@ What is happening here is that the GPIO pin will be loaded positive as soon as t
 ![IMG_2733](https://github.com/solana-developers/solana-depin-examples/assets/5938789/c2972057-4e68-47a3-aaf4-538686c5ae03)
 ![IMG_2735](https://github.com/solana-developers/solana-depin-examples/assets/5938789/d09fe43a-6792-432f-8483-bce2c36d4c5d)
 
-This is already the whole setup we need. Now just find a nice spot for your pump and attach the raspberry with a power bank so its looks like the wine is controlled by magic. 
+This is already the whole setup we need. Now just find a nice spot for your pump and attach the raspberry with a power bank so it looks like the wine is controlled by magic. 
 
 ## The anchor program
 
@@ -70,7 +70,7 @@ The program has a function to buy a shot and a function to mark the shot as deli
 When scanning the QR code a transaction request is created that calls the buy shot function by signing a transaction on the users mobile wallet. 
 When the raspberry pi receives the transaction request it will turn on the pump and wait for a certain amount of time. 
 Then it will call the mark shot as delivered function.
-This program can be easily expanded to have multiple pumps and multiple drinks. The recieps can be used to track how much was sold for accounting. 
+This program can be easily expanded to have multiple pumps and multiple drinks. The receipts can be used to track how much was sold for accounting. 
 
 ```rust
 use anchor_lang::solana_program::native_token::LAMPORTS_PER_SOL;
@@ -209,7 +209,7 @@ See [LED-SWITCH-EXAMPLE
 
 The script is written in typescript and uses the anchor framework to interact with the blockchain. Make sure you copy the solana_bar types script next to the bar.ts script to be able to interact with the anchor program. 
 
-This script is loading the receipts account and starts purring all drink that are not delivered yet. Then it starts listening to the receipts account and purrs drinks as they are being bought. 
+This script is loading the receipts account and starts purring all drinks that are not delivered yet. Then it starts listening to the receipts account and purrs drinks as they are being bought. 
 
 To purr a drink it activates GPIO 23 which is connected to a transistor is connected to a 5V line which is connected to the pump. The time to purr could be adjusted by adding a field for purr time for different drinks into the receipt account for example. 
 
@@ -227,7 +227,7 @@ var GPIO_23 = new Gpio(23, 'out'); //use GPIO pin 18, and specify that it is out
 
 let connection = new Connection(clusterApiUrl("devnet"));
 
-// Replace this with your own keypair to be able to pay for fees to mark drinks a delivered.
+// Replace this with your own keypair to be able to pay for fees to mark drinks as delivered.
 const keypair = Keypair.fromSecretKey(
   Uint8Array.from([209,70,174,212,192,159,166,82,163,162,135,190,244,227,218,97,214,155,228,142,172,188,170,246,130,68,106,45,170,125,175,57,12,253,44,189,234,23,239,220,85,57,231,86,130,27,99,62,106,215,172,104,152,104,145,138,198,105,218,20,232,251,238,250])
 );
