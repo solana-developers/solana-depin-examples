@@ -8,7 +8,7 @@ This project consists of three parts:
 - The Helium Lorawan door sensor which sends the state of the chest to the Helium console.
 - An API which listens to the door sensor and updates the state of the anchor program.
 - The Solana Pay Transaction request api which creates a QR code which can be scanned by any mobile wallet that supports Solana Pay to loot the chest.
-- Optional: A Raspberry Pi with a LED which listens to the state of the anchor program and turns the LED on or off.
+- Optional: A Raspberry Pi with a LED which listens to the state of the anchor program and turns an LED on or off.
 
 ## Hardware Required
 
@@ -21,15 +21,19 @@ If you want to attach a raspberry pi to the chest please follow the led-switch e
 
 ## Setup Helium Lorawan door sensor
 
-When you order a lorawan sensor it comes with a little paper with 3 ids on it.
-These you need to add into the Helium console: 
-https://console.helium.com/
+Add betteries into your sensor. I little green LED will indicate that its trying to connect to the helium network.
 
-<Picture device> 
+When you order a lorawan sensor it comes with a little paper with 3 ids on it.
+Device EUI, App EUI and App Key.
+
+These you need to add into the Helium console: 
+[Devices](https://console.helium.com/devices)
+
+<img width="1249" alt="image" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/2f0ecf92-87bb-4e5c-a088-3daf27ed566c">
 
 Then you need to find the decoder for your sensor on its user manual. 
 In our case you will find it here under uplink: 
-http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/LDS02%20-%20LoRaWAN%20Door%20Sensor%20User%20Manual/#H4.4DownlinkPayload
+[Sensor Data Sheet](http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/LDS02%20-%20LoRaWAN%20Door%20Sensor%20User%20Manual/#H4.3UplinkPayload)
 
 Which will lead you to: 
 https://github.com/dragino/dragino-end-node-decoder/tree/main/LDS02
@@ -37,14 +41,36 @@ https://github.com/dragino/dragino-end-node-decoder/tree/main/LDS02
 There you can download the ttn (The Things Network) decoder. I used version 1.5 which is compatible.
 Then you can add the decoder to the Helium console under functions.
 
-<Picture Decoder> 
+<img width="1906" alt="image" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/10c10a9a-8cf0-4845-a356-a52fc6bc3edd">
+
 
 Last thing we need to do is to create an HTTP integration so that the Helium console sends the data to our API.
 For that you pick http integration and add the url of your api. The API link we will create in the next step. You can change it later.
 
+<img width="1835" alt="image" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/92925bef-7c5c-4c7c-8489-136065a7d139">
+
+
 Then under flows you add the device, then plug it into the decoder and then plug it into the http integration. Like that the api will be called every time the sensor sends data and the data will already arrive decoded. 
 
-<Picture http integration> 
+<img width="1190" alt="image" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/7810d085-be8a-4bae-bb5b-6af834ddd1c2">
+
+Start your API using 
+
+```bash
+cd app
+yarn dev
+```
+
+Use ngrok to make your API publically available or deploy to vercel: 
+https://ngrok.com/product
+
+```bash
+ngrok http 3000
+```
+
+https://vercel.com/
+
+Copy the url to your api into the http integration in the helium console. 
 
 If you did the integration correctly you should be seeing an out put similar to this in your api:
 So you have all the information about the sensor. You can also for example use the door open duration or the amount of door open to add more logic to your chest. 
