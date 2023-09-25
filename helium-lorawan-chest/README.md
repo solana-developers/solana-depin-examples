@@ -4,17 +4,108 @@ This is an example of a chest with qr code which only works when the chest is op
 It uses a Helium Lorawan door sensor which writes its state in the state of an anchor program.
 It can also be extended by connecting it to a raspberry pi and a LED.
 
+This project consists of three parts: 
+- The Helium Lorawan door sensor which sends the state of the chest to the Helium console.
+- An API which listens to the door sensor and updates the state of the anchor program.
+- The Solana Pay Transaction request api which creates a QR code which can be scanned by any mobile wallet that supports Solana Pay to loot the chest.
+- Optional: A Raspberry Pi with a LED which listens to the state of the anchor program and turns the LED on or off.
 
 ## Hardware Required
 
 A Lorawan magnetic Door sensor LDS02 (There are many resellers, just google it)): 
 https://www.reichelt.de/lorawan-tuer-und-fenstersensor-dra-lds02-p311270.html
 
-
+If you want to attach a raspberry pi to the chest please follow the led-switch example:
+[LED-SWITCH-EXAMPLE
+](https://github.com/solana-developers/solana-depin-examples/blob/main/led-switch/README.md)
 
 ## Setup Helium Lorawan door sensor
 
-... TODO
+When you order a lorawan sensor it comes with a little paper with 3 ids on it.
+These you need to add into the Helium console: 
+https://console.helium.com/
+
+<Picture device> 
+
+Then you need to find the decoder for your sensor on its user manual. 
+In our case you will find it here under uplink: 
+http://wiki.dragino.com/xwiki/bin/view/Main/User%20Manual%20for%20LoRaWAN%20End%20Nodes/LDS02%20-%20LoRaWAN%20Door%20Sensor%20User%20Manual/#H4.4DownlinkPayload
+
+Which will lead you to: 
+https://github.com/dragino/dragino-end-node-decoder/tree/main/LDS02
+
+There you can download the ttn (The Things Network) decoder. I used version 1.5 which is compatible.
+Then you can add the decoder to the Helium console under functions.
+
+<Picture Decoder> 
+
+Last thing we need to do is to create an HTTP integration so that the Helium console sends the data to our API.
+For that you pick http integration and add the url of your api. The API link we will create in the next step. You can change it later.
+
+Then under flows you add the device, then plug it into the decoder and then plug it into the http integration. Like that the api will be called every time the sensor sends data and the data will already arrive decoded. 
+
+<Picture http integration> 
+
+If you did the integration correctly you should be seeing an out put similar to this in your api:
+So you have all the information about the sensor. You can also for example use the door open duration or the amount of door open to add more logic to your chest. 
+
+```bash
+Door is open: {
+  app_eui: '...',
+  dc: { balance: 189, nonce: 1 },
+  decoded: {
+    payload: {
+      ALARM: 0,
+      BAT_V: 3.174,
+      DOOR_OPEN_STATUS: 0,
+      DOOR_OPEN_TIMES: 28,
+      LAST_DOOR_OPEN_DURATION: 0,
+      MOD: 1
+    },
+    status: 'success'
+  },
+  dev_eui: '...',
+  devaddr: '03000048',
+  downlink_url: 'https://console.helium.com/api/v1/down/....',
+  fcnt: 53,
+  hotspots: [
+    {
+      channel: 5,
+      frequency: 868.1,
+      hold_time: 0,
+      id: '???????',
+      lat: xxx,
+      long: yyy,
+      name: '????-????-????',
+      reported_at: 1695491235713,
+      rssi: -131,
+      snr: -13.5,
+      spreading: 'SF12BW125',
+      status: 'success'
+    }
+  ],
+  id: 'ID...',
+  metadata: {
+    adr_allowed: false,
+    cf_list_enabled: false,
+    multi_buy: 1,
+    organization_id: 'ID...'
+    preferred_hotspots: [],
+    rx_delay: 1,
+    rx_delay_actual: 1,
+    rx_delay_state: 'rx_delay_established'
+  },
+  name: 'Door Sensor',
+  payload: 'DGYBAAAcAAAAAA==',
+  payload_size: 10,
+  port: 10,
+  raw_packet: 'QAMAAEiANQAK5yx+wU+dOzSfMkpVL9c=',
+  replay: false,
+  reported_at: 1695491235713,
+  type: 'uplink',
+  uuid: 'id...'
+}
+```
 
 ## The program
 
@@ -24,8 +115,12 @@ Also the seed for the chest account is just a string, so everyone can call this 
 
 ```rust
 use anchor_lang::prelude::*;
+use solana_program::pubkey;
 
 declare_id!("2UYaB7aU7ZPA5LEQh3ZtWzC1MqgLkEJ3nBKebGUrFU3f");
+
+// Change this to what ever key you use in your API to make sure not everyone can just call the switch function.
+const ADMIN_PUBKEY: Pubkey = pubkey!("LorBisZjmXHAdUnAWKfBiVh84yaxGVF2WY6kjr7AQu5");
 
 #[error_code]
 pub enum LorawanChestError {
@@ -42,7 +137,7 @@ pub mod lorawan_chest {
     }
 
     pub fn switch(ctx: Context<Switch>, is_on: bool) -> Result<()> {
-        // Here you may want to add a check that only your API is allowed to open and close the chest. Otherwise everyone could call this function and open the chest.
+        // Note that the account which will be able to change the state if this account is only the admin account.
         ctx.accounts.lorawan_chest.is_open = is_on;
         Ok(())
     }
@@ -52,9 +147,9 @@ pub mod lorawan_chest {
             return Err(LorawanChestError::ChestIsClosed.into());
         }
 
-        // Add any kind of loot action here. For the example we have a simple log.
-        // We also have a transfer instruction in the next.js api, but you can also add it in the program. 
-        // Or you could save per user here which chests he already collected, or mint an NFT for example.
+        // You can add any kind of loot action here.
+        // In the next js api we add a transfer, but you could also mint an NFT for example.
+        // Or you could save per user here which chests he already collected and build some real live adventure game.
         msg!("Looted!");
 
         Ok(())
@@ -75,7 +170,7 @@ pub struct Initialize<'info> {
 pub struct Switch<'info> {
     #[account(mut, seeds = [b"lorawan_chest"], bump)]
     pub lorawan_chest: Account<'info, LorawanChest>,
-    #[account(mut)]
+    #[account(mut, address = ADMIN_PUBKEY)] // <- Note that here we check for the admin account. 
     pub authority: Signer<'info>,
 }
 
@@ -94,103 +189,14 @@ pub struct LorawanChest {
 
 ```
 
-## Now we want to listen to the account via websocket and trigger the LED
-
-Use scp or rsync to copy the files from the raspberry folder to the raspberry pi.
-(If you have problems coping files like i had you can also use VNC Viewer to copy the files.)
-Notice that you need to copy the anchor types from the target folder to the raspberry folder whenever you do changes. (I didn't manage to get it to work without copying the types file over next to the led.ts file.) 
-
-Then maybe you need to install node types and type script. 
-
-```console
-npm install -D typescript
-npm install -D ts-node
-```
-
-Then you can run 
-
-```console
-npm i 
-and then run the script led.ts 
-npx ts-node led.ts
-```
-
-Don't run it with sudo. That gave me problems.
-You may need to change the rights of the directory to be able to write to it:
-```console
-chmod -R 777 /directory
-```
-
-Now the LED will already have the correct state that is in the LED account. Next we gonna change it via Solana Pay Transaction requests.
-
-```js
-import * as anchor from "@coral-xyz/anchor";
-import { Program } from "@coral-xyz/anchor";
-import { IDL, LedSwitch } from "../target/types/led_switch";
-import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js";
-import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet";
-
-var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
-var LED = new Gpio(18, 'out'); //use GPIO pin 18, and specify that it is output
-
-let connection = new Connection(clusterApiUrl("devnet"));
-let wallet = new NodeWallet(new Keypair());
-const provider = new anchor.AnchorProvider(connection, wallet, {
-  commitment: "processed",
-});
-anchor.setProvider(provider);
-
-const program = new Program<LedSwitch>(IDL, "F7F5ZTEMU6d5Ac8CQEJKBGWXLbte1jK2Kodyu3tNtvaj", { connection })
-
-console.log("Program ID", program.programId.toString());
-
-startListeningToLedSwitchAccount();
-
-async function startListeningToLedSwitchAccount() {
-    const ledSwitchPDA = await anchor.web3.PublicKey.findProgramAddressSync(
-        [
-          Buffer.from("led-switch"),
-        ],
-        program.programId,
-      )[0];
-
-    const ledSwitchAccount = await program.account.ledSwitch.fetch(
-        ledSwitchPDA
-    )
-
-    console.log(JSON.stringify(ledSwitchAccount));
-    console.log("Led is: ", ledSwitchAccount.isOn);
-    if (ledSwitchAccount.isOn) {
-      LED.writeSync(1);
-    } else {
-      LED.writeSync(0);
-    }
-    
-    connection.onAccountChange(ledSwitchPDA, (account) => {
-        const decoded = program.coder.accounts.decode(
-            "ledSwitch",
-            account.data
-          )
-
-          if (decoded.isOn) {
-            LED.writeSync(1);
-          } else {
-            LED.writeSync(0);
-          }
-        console.log("Account changed. Led is: ", decoded.isOn);
-    }, "processed")
-};
-```
-
-Now the LED will always show the state of the LED account. Next we gonna change the state of the LED account via Solana Pay Transaction requests.
 
 ## Create a Solana Pay Transaction Request
 
 Solana Pay is not only for payments, but can request any transaction to be signed. 
-The transaction can be signed by any wallet that supports Solana Pay. 
-It consists of two parts. The api which can be found in led-switch/app/pages/api/transaction.ts and the creation of the QR code which can be found in led-switch/app/app/page.tsx and the QrCode in led-switch/app/app/components/qr-code.tsx. 
+The transaction can be signed by any wallet that supports Solana Pay. Especially useful on mobile. 
+It consists of two parts. The api which can be found in lorawan-chest/app/pages/api/transaction.ts and the creation of the QR code which can be found in lorawan-chest/app/app/page.tsx and the QrCode in lorawan-chest/app/app/components/qr-code.tsx. 
 
-Basically what is happening is that the wallet sends a get request to our API to get a name and icon and then the transaction is created in the nextJS api and send to the wallet. The wallet then signs it. When the transaction is confirmed the LED account is updated and since on the raspberry pi we have a websocket connection to that account the LED turns on or off.
+Basically what is happening is that the wallet sends a get request to our API to get a name and icon and then the transaction is created in the nextJS api and send to the wallet. The wallet then signs it. When the transaction is confirmed the chest is looted. We add two instructions. One is a transfer of sol and one is the loot instruction to our anchor program. The Loot instruction will only work if the chest is open. 
 
 To run the solana pay transaction request app use: 
 
@@ -209,28 +215,30 @@ ngrok http 3000
 Then copy the url from the terminal and open it in the browser.
 Now the QR code should work and switch the LED on and off. 
 
-Now you can also copy and print the QR codes and glue them somewhere next to the LED for example. 
+Now you can also copy and print the QR codes and glue them somewhere into the chest for example. 
 
 
 ## Deploy 
 
-Since you don't want to run ngrok every time it makes sense to deploy the app. Either on the raspberry itself or on for example vercel.com. 
+Since you don't want to run ngrok every time it makes sense to deploy the app. You can deploy it to vercel and update the link to your api in the Helium console. 
 
 
 ## Where to go from here
 
+There are many many different sensors that you can use for your depin projects.
+Here is a list of ready to use sensors. There are temperature, humidity and many other sensors. 
+Some ideas that you could do with them:
+- A chest that only opens when the temperature is below 0 degrees of when its raining.
+- You could use distance senors to figure out if there are free parking spots in a city and have an app which shows you where you can park.
+- You could use a light sensor to figure out if a room is occupied or not.
+- You use downlinks and solana pay QR codes to control a robot car or a drone. 
+- You could build a live stream where people can control robots via qr codes and let them fight against each other.
+- You could build a smart package by building a tiny lorawan sensor and put it in reusable packages. Like that I would not need to wait at home anymore when i am about to recieve a package, but could instead just get a notification when the package is delivered and then go and pick it up. kastzentracker.eu is building tiny sensors to track cats for example. 
+- You could build a warning system for nature catastrophes like floods or fires.
+- You could build a vending machine using solana pay qr codes 
 
-Now you just need imagination to think of what you can do with this.
-For example you could create a game where you have to scan the QR code to switch the LED on and off or control switches and ramps for marbles.
-Or you could use a lock to open a door. Or even only open it when there is certain NFT in that wallet. 
-Or you could use it to water plants or feed a hamster during a live stream. 
-Or attach it to a car which can be controlled by the audience.
 
-Have fun and let me know what you build with it! 
-
-
-
-## Optional step: Show the status of the chest with an LED
+## Optional step: Show the status of the chest with an LED using a raspberry pi
 
 Optional to show the current status of the chest with an LED:
 A Raspberry Pi 4B with WiFi connection, a LED and a 220 ohm resistor.
@@ -383,4 +391,94 @@ run it with:
 ```console
 sudo node blink.js
 ```
+
+## Now we want to listen to the account via websocket and trigger the LED
+
+Use scp or rsync to copy the files from the raspberry folder to the raspberry pi.
+(If you have problems coping files like i had you can also use VNC Viewer to copy the files.)
+Notice that you need to copy the anchor types from the target folder to the raspberry folder whenever you do changes. (I didn't manage to get it to work without copying the types file over next to the led.ts file.) 
+
+Then maybe you need to install node types and type script. 
+
+```console
+npm install -D typescript
+npm install -D ts-node
+```
+
+Then you can run 
+
+```console
+npm i 
+and then run the script led.ts 
+npx ts-node led.ts
+```
+
+Don't run it with sudo. That gave me problems.
+You may need to change the rights of the directory to be able to write to it:
+```console
+chmod -R 777 /directory
+```
+
+Now the LED will already have the correct state that is in the LED account. Next we gonna change it via Solana Pay Transaction requests.
+
+```js
+import * as anchor from "@coral-xyz/anchor";
+import { Program } from "@coral-xyz/anchor";
+import { IDL, LorwawanChest } from "../target/types/lorwan_chest";
+import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js";
+import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet";
+
+var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
+var LED = new Gpio(18, 'out'); //use GPIO pin 18, and specify that it is output
+
+let connection = new Connection(clusterApiUrl("devnet"));
+let wallet = new NodeWallet(new Keypair());
+const provider = new anchor.AnchorProvider(connection, wallet, {
+  commitment: "processed",
+});
+anchor.setProvider(provider);
+
+const program = new Program<LorwawanChest>(IDL, "2UYaB7aU7ZPA5LEQh3ZtWzC1MqgLkEJ3nBKebGUrFU3f", { connection })
+
+console.log("Program ID", program.programId.toString());
+
+startListeningToLedSwitchAccount();
+
+async function startListeningToLedSwitchAccount() {
+    const lorawanChestPDA = await anchor.web3.PublicKey.findProgramAddressSync(
+        [
+          Buffer.from("lorawan_chest"),
+        ],
+        program.programId,
+      )[0];
+
+    const lorawanChestAccount = await program.account.lorawanChest.fetch(
+        lorawanChestPDA
+    )
+
+    console.log(JSON.stringify(lorawanChestAccount));
+    console.log("Led is: ", lorawanChestAccount.isOpen);
+    if (ledSwitchAccount.isOpen) {
+      LED.writeSync(1);
+    } else {
+      LED.writeSync(0);
+    }
+    
+    connection.onAccountChange(lorawanChestPDA, (account) => {
+        const decoded = program.coder.accounts.decode(
+            "lorawanChest",
+            account.data
+          )
+
+          if (decoded.isOpen) {
+            LED.writeSync(1);
+          } else {
+            LED.writeSync(0);
+          }
+        console.log("Account changed. Chest is: ", decoded.isOpen);
+    }, "processed")
+};
+```
+
+When you run this script on your raspberry pi the LED will always show the state of the ChestAccount account. This is a nice indicator that the chest is currently open and the QR code can be scanned. 
 

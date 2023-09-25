@@ -77,6 +77,16 @@ const post = async (req: NextApiRequest, res: NextApiResponse<POST>) => {
     })
 
     transaction.add(tokenTransferIx);
+
+    let lootInstruction = await LORAWAN_CHEST_PROGRAM.methods.loot().accounts(
+      {
+        lorawanChest: LORAWAN_CHEST_PDA,
+        authority: sender,
+      },
+    ).instruction();
+
+    transaction.add(lootInstruction);
+
     transaction.sign(burnerKeypair);
 
     message = 'Loot chest!';
