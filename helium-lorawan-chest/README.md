@@ -4,6 +4,9 @@ This is an example of a chest with qr code which only works when the chest is op
 It uses a Helium Lorawan door sensor which writes its state in the state of an anchor program.
 It can also be extended by connecting it to a raspberry pi and a LED.
 
+<img width="1393" alt="image" src="https://github.com/solana-developers/solana-depin-examples/assets/5938789/23ec892e-0fde-4c67-9fee-727e535375d2">
+
+
 This project consists of three parts: 
 - The Helium Lorawan door sensor which sends the state of the chest to the Helium console.
 - An API which listens to the door sensor and updates the state of the anchor program.
