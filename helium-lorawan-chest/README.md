@@ -133,6 +133,62 @@ Door is open: {
 }
 ```
 
+## The sensor API 
+
+The API changing the state in the program you can find here: 
+[Downling api](https://github.com/solana-developers/solana-depin-examples/blob/main/helium-lorawan-chest/app/pages/api/sensor-downlink.ts)
+
+We use a local keypair which writes the current state of sensor in the state of the lorawan_chest anchor program. 
+The program will only allow changs coming from this key pair. So if you want to chagne the key pair you may need to adjust also the admin key in the anchor program. 
+
+```js
+const post = async (req: NextApiRequest, res: NextApiResponse<POST>) => {
+
+  console.log("Door is open:", req.body);
+  console.log("Door is open:", req.body.decoded.payload.DOOR_OPEN_STATUS);
+
+  const burner = JSON.parse(process.env.BURNER_KEY ?? "") as number[]
+  const burnerKeypair = Keypair.fromSecretKey(Uint8Array.from(burner))  
+  const sender = burnerKeypair.publicKey;
+
+  const transaction = new Transaction();
+  const latestBlockhash = await CONNECTION.getLatestBlockhash();
+  transaction.feePayer = sender;
+  transaction.recentBlockhash = latestBlockhash.blockhash;
+
+  let message = '';
+
+  if (req.body.decoded.payload.DOOR_OPEN_STATUS == "1") {
+    let ix = await LORAWAN_CHEST_PROGRAM.methods.switch(true).accounts(
+      {
+      lorawanChest: LORAWAN_CHEST_PDA,
+      authority: sender
+      },
+    ).instruction();
+    
+    transaction.add(ix);
+    
+    message = 'Door open !';
+  } else {
+    let ix = await LORAWAN_CHEST_PROGRAM.methods.switch(false).accounts(
+      {
+      lorawanChest: LORAWAN_CHEST_PDA,
+      authority: sender
+      },
+    ).instruction();
+    
+    transaction.add(ix);
+    message = 'Door Closed';
+  }
+
+  var signature = await CONNECTION.sendTransaction(transaction, [burnerKeypair]);
+  console.log("Transaction signature:", signature);
+
+  res.status(200).send({ message });
+};
+```
+
+
 ## The program
 
 The program is a small anchor program which has a boolean which indicated if the chest is currently open or close.
