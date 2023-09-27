@@ -21,5 +21,6 @@ Take the liquid dispenser to the beach or a party and start selling holy water t
 ### [Helium-Lorawan-Sensor-Chest](./helium-lorawan-chest/README.md)
 This example shows how to use the helium network, which is powered by Solana, to create a chest which is only lootable via Solana Pay Transaction requests when the chest is physically open. 
 It comes with a whole walkthrough of how to setup the sensor, create the api and the solana pay transaction requests. 
+[Twitter Video](https://x.com/solana_devs/status/1707043184373637411)
 
 
