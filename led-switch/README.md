@@ -6,7 +6,46 @@ In this example you will learn how to control a LED using Solana Pay Transaction
 
 https://github.com/solana-developers/solana-depin-examples/assets/5938789/784e851c-258d-4d5a-8508-dda90b22eb7f
 
+NOTE: 
+If you use a raspberry 5 instead of 4 you need to use different GPIO pin addressed: 
+You can find the addresses like this: 
 
+```bash
+cat /sys/kernel/debug/gpio
+```
+
+Here is the most important ones: 
+
+So if it sais 18 in the tutorial you use 589 instead and so on: 
+
+```
+gpio-573 (GPIO2               )
+ gpio-574 (GPIO3               )
+ gpio-575 (GPIO4               )
+ gpio-576 (GPIO5               )
+ gpio-577 (GPIO6               )
+ gpio-578 (GPIO7               )
+ gpio-579 (GPIO8               )
+ gpio-580 (GPIO9               )
+ gpio-581 (GPIO10              )
+ gpio-582 (GPIO11              )
+ gpio-583 (GPIO12              )
+ gpio-584 (GPIO13              )
+ gpio-585 (GPIO14              )
+ gpio-586 (GPIO15              )
+ gpio-587 (GPIO16              )
+ gpio-588 (GPIO17              )
+ gpio-589 (GPIO18              )
+ gpio-590 (GPIO19              )
+ gpio-591 (GPIO20              )
+ gpio-592 (GPIO21              )
+ gpio-593 (GPIO22              )
+ gpio-594 (GPIO23              )
+ gpio-595 (GPIO24              )
+ gpio-596 (GPIO25              )
+ gpio-597 (GPIO26              )
+ gpio-598 (GPIO27              )
+```
 
 ## Hardware Required
 
