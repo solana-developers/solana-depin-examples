@@ -252,9 +252,15 @@ pub struct LedSwitch {
 
 ## Now we want to listen to the account via websocket and trigger the LED
 
-Use scp or rsync to copy the files from the raspberry folder to the raspberry pi.
+The best way to code on the raspberry pi directly is to use the VS code SSH extension from Microsoft. 
+Install it and click the little blue icon on the bottom left of VSCode to connect. Use the same command you would use in the terminal `ssh jonas@raspberrypi.local` and it will ask you for a password on the top. 
+Then open the folder and start coding. 
+
+You can also use scp or rsync to copy the files from the raspberry folder to the raspberry pi.
 (If you have problems coping files like I had you can also use VNC Viewer to copy the files.)
 Notice that you need to copy the anchor types from the target folder to the raspberry folder whenever you do changes. (I didn't manage to get it to work without copying the types file over next to the led.ts file.) 
+
+Copy all the files from the raspberry folder in this repo on to the raspberry pi. When you deploy your own program donr forget to replace the anchor types as well as your program id.  
 
 Then maybe you need to install node types and type script. 
 
