@@ -363,6 +363,9 @@ It consists of two parts. The api which can be found in led-switch/app/pages/api
 
 Basically what is happening is that the wallet sends a get request to our API to get a name and icon and then the transaction is created in the nextJS api and send to the wallet. The wallet then signs it. When the transaction is confirmed the LED account is updated and since on the raspberry pi we have a websocket connection to that account the LED turns on or off.
 
+Here is the example API already deployed to vercel for you to try out: 
+https://solana-depin-examples-led.vercel.app/
+
 To run the solana pay transaction request app use: 
 
 ```console
@@ -381,7 +384,6 @@ Then copy the url from the terminal and open it in the browser.
 Now the QR code should work and switch the LED on and off. 
 
 Now you can also copy and print the QR codes and glue them somewhere next to the LED for example. 
-
 
 ## Deploy 
 
