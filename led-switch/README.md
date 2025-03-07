@@ -55,7 +55,11 @@ A 32 Gb mini sd card for the raspberry OS.
 For example: 
 
 https://www.amazon.de/dp/B0C7KXMP7W
+
 https://www.amazon.de/dp/B07WYX8M76
+
+Or if you need a case, sd card and power cable: 
+https://www.amazon.de/RasTech-Raspberry-Active-Cooler-Readers/dp/B0D2WYFS23?th=1
 
 For american builders i would recommend: 
 https://www.amazon.com/RasTech-Raspberry-Active-Cooler-Readers/dp/B0D2WYFS23
