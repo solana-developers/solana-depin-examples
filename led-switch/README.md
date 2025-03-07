@@ -166,8 +166,8 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 ```
 
 ```console
-nvm install 16.19.1
-nvm use 16.19.1
+nvm install v18.19.0
+nvm use v18.19.0
 node --version
 ```
 
