@@ -57,6 +57,11 @@ For example:
 https://www.amazon.de/dp/B0C7KXMP7W
 https://www.amazon.de/dp/B07WYX8M76
 
+For american builders i would recommend: 
+https://www.amazon.com/RasTech-Raspberry-Active-Cooler-Readers/dp/B0D2WYFS23
+and 
+https://www.amazon.com/SunFounder-Raspberry-Compatible-Electronics-Programming/dp/B07WV2HYC6
+
 There may be cheaper and better options. This is an example, any Raspberry 4b and any starter kit with a LED and a resistor will do. Probably a raspberry nano/pico or similar would also work.
 
 ## Setup Raspberry
