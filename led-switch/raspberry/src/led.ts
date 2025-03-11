@@ -1,11 +1,20 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
-import { IDL, LedSwitch } from "./led_switch";
+import LedSwitch from "./led_switch";
+import idl from "./led_switch.json";
+
 import { clusterApiUrl, Connection, Keypair } from "@solana/web3.js";
+import {
+  Program,
+  AnchorProvider,
+  EventParser,
+  Idl,
+  Wallet,
+} from "@coral-xyz/anchor";
 import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet";
 
 var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
-var LED = new Gpio(18, 'out'); //use GPIO pin 18, and specify that it is output
+var LED = new Gpio(589, 'out'); //use GPIO pin 18, and specify that it is output
 
 let connection = new Connection(clusterApiUrl("devnet"));
 let wallet = new NodeWallet(new Keypair());
@@ -14,7 +23,7 @@ const provider = new anchor.AnchorProvider(connection, wallet, {
 });
 anchor.setProvider(provider);
 
-const program = new Program<LedSwitch>(IDL, "F7F5ZTEMU6d5Ac8CQEJKBGWXLbte1jK2Kodyu3tNtvaj", { connection })
+const program = new Program(idl as Idl, { connection })
 
 console.log("Program ID", program.programId.toString());
 
