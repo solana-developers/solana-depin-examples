@@ -23,11 +23,6 @@ This example shows how to use the helium network, which is powered by Solana, to
 It comes with a whole walkthrough of how to setup the sensor, create the api and the solana pay transaction requests. 
 [Twitter Video](https://x.com/solana_devs/status/1707043184373637411)
 
-### [Helium-Lorawan-Sensor-Chest](./helium-lorawan-chest/README.md)
-This example shows how to use the helium network, which is powered by Solana, to create a chest which is only lootable via Solana Pay Transaction requests when the chest is physically open. 
-It comes with a whole walkthrough of how to setup the sensor, create the api and the solana pay transaction requests. 
-[Twitter Video](https://x.com/solana_devs/status/1707043184373637411)
-
 ### [Rust based esp32 Solana tracker with display](https://github.com/Mantistc/esp32-ssd1306-solana) 
 Show Solana real-time data in a little ssd1306 display using the microcontroller esp32 to manage wifi, http request and more.
 [Twitter Video](https://x.com/lich01_/status/1899208452167102621)  
