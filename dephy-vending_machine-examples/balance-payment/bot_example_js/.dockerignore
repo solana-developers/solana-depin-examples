@@ -1,0 +1,11 @@
+target/
+tmp/
+log/
+Dockerfile
+.dockerignore
+.env
+.DS_Store
+.swp
+.vscode
+.idea
+node_modules

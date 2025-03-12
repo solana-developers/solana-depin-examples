@@ -1,0 +1,58 @@
+[advisories]
+version = 2
+yanked = "warn"
+db-path = "~/.cargo/advisory-db"
+db-urls = ["https://github.com/rustsec/advisory-db"]
+ignore = [
+  # waiting for nostr crates to be updated
+  "RUSTSEC-2024-0384",
+  # waiting for solana crates to be updated
+  "RUSTSEC-2022-0093",
+  # waiting for solana crates to be updated
+  "RUSTSEC-2024-0388",
+  # waiting for solana crates to be updated
+  "RUSTSEC-2024-0344",
+  # waiting for solana crates to be updated
+  "RUSTSEC-2021-0145",
+  # waiting for solana crates to be updated
+  "RUSTSEC-2024-0375",
+]
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+highlight = "all"
+
+[licenses]
+version = 2
+confidence-threshold = 0.8
+
+allow = [
+    "MIT",
+    "MITNFA",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-3-Clause",
+    "BSD-2-Clause",
+    "0BSD",
+    "ISC",
+    "Unicode-3.0",
+    "Unicode-DFS-2016",
+    "Unlicense",
+    "MPL-2.0",
+    "CC0-1.0",
+    "Zlib",
+    # https://github.com/briansmith/ring/issues/902
+    "LicenseRef-ring",
+]
+
+[[licenses.clarify]]
+name = "ring"
+expression = "LicenseRef-ring"
+license-files = [{ path = "LICENSE", hash = 0xbd0eed23 }]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = ["git://github.com/anza-xyz/agave.git"]
