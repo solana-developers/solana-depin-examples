@@ -30,3 +30,9 @@ Show Solana real-time data in a little ssd1306 display using the microcontroller
 ### [Unruggable ESP32 Solana Hardware Signer](https://github.com/hogyzen12/unruggable-rust-esp32)
 This example demonstrates how to build a low-cost hardware wallet using an ESP32 microcontroller that can securely sign Solana transactions. The ESP32 generates and stores a private key, requiring physical button confirmation for transaction signing. The project includes firmware for the ESP32 (written in Rust) and companion clis in Rust, Go for creating and submitting transactions.
 [Twitter Video](https://x.com/bill_papas_12/status/1903308186498596979)
+
+### [Write Sensor Data on chain](https://x.com/priyansh_ptl18/status/1903940356070424825)
+This example shows how to write sensor data to the chain using the Solana Pay transaction request. It reads the sensor data and saves it into an anchor program: 
+https://github.com/priyanshpatel18/aeroscan 
+https://github.com/priyanshpatel18/aeroscan-esp32
+https://github.com/priyanshpatel18/aeroscan-ws
