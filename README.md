@@ -27,3 +27,8 @@ It comes with a whole walkthrough of how to setup the sensor, create the api and
 Show Solana real-time data in a little ssd1306 display using the microcontroller esp32 to manage wifi, http request and more.
 [Twitter Video](https://x.com/lich01_/status/1899208452167102621)  
 
+### [Write Sensor Data on chain](https://x.com/priyansh_ptl18/status/1903940356070424825)
+This example shows how to write sensor data to the chain using the Solana Pay transaction request. It reads the sensor data and saves it into an anchor program: 
+https://github.com/priyanshpatel18/aeroscan 
+https://github.com/priyanshpatel18/aeroscan-esp32
+https://github.com/priyanshpatel18/aeroscan-ws
