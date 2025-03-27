@@ -1,0 +1,7 @@
+#!/bin/bash
+
+USER=$1
+AMOUNT=$2
+RECOVER_INFO=$3
+
+exec bun run /opt/balance-payment-bot/index.ts lock --net devnet --rpc "https://api.devnet.solana.com" --keypair /opt/balance-payment-bot/bot.demo.json --user "$USER" --amount "$AMOUNT" --recoverInfo "$RECOVER_INFO"
