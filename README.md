@@ -38,7 +38,9 @@ This example demonstrates how to build a low-cost hardware wallet using an ESP32
 
 This example shows how to write sensor data to the chain using the Solana Pay transaction request. It reads the sensor data and saves it into an anchor program:
 https://github.com/priyanshpatel18/aeroscan
+
 https://github.com/priyanshpatel18/aeroscan-esp32
+
 https://github.com/priyanshpatel18/aeroscan-ws
 
 ### [Solana slot Display]()
