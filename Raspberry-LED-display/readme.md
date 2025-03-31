@@ -9,6 +9,9 @@ This example shows how you can use a Raspberry Pi to display the current Solana 
 
 ## Connect the OLED Display
 
+![RaspberryLEDDisplay](https://github.com/user-attachments/assets/863cb8b0-1ff3-411f-aa24-50d1dc607819)
+
+
 First you need to enable I2C on the Raspberry Pi:
 
 ```bash
