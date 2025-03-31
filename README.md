@@ -43,6 +43,6 @@ https://github.com/priyanshpatel18/aeroscan-esp32
 
 https://github.com/priyanshpatel18/aeroscan-ws
 
-### [Solana slot Display](https://github.com/solana-developers/solana-depin-examples/tree/main/Raspberry-LED-display)
+### [Solana slot LED-Display](https://github.com/solana-developers/solana-depin-examples/tree/main/Raspberry-LED-display)
 
 This example shows use an LED Display to show the current Solana slot using a Raspberry Pi and a I2C - SSD1306.
