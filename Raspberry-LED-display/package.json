@@ -1,0 +1,19 @@
+{
+    "name": "led-display",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "@solana/web3.js": "^1.98.0",
+      "i2c-bus": "^5.2.3",
+      "oled-font-5x7": "^1.0.3",
+      "oled-i2c-bus": "^1.0.12"
+    }
+  }
+  
