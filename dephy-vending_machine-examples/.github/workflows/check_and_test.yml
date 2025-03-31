@@ -1,0 +1,40 @@
+name: Check and test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: Check and test
+    strategy:
+      matrix:
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup rust toolchain
+        run: |
+          rustup install nightly
+          rustup component add rustfmt --toolchain nightly
+          rustup show
+      - name: Install nextest
+        uses: taiki-e/install-action@nextest
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: check-and-test-${{ matrix.platform }}-v1
+      - name: Check code format
+        run: cargo +nightly fmt -- --check
+      - name: Check the package for errors
+        run: cargo check --all
+      - name: Lint rust sources
+        run: cargo clippy --all-targets --all-features --tests --benches -- -D warnings
+      - name: Execute rust tests
+        run: cargo nextest run --all-features --no-tests=pass

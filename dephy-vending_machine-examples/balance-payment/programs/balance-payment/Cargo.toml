@@ -1,0 +1,26 @@
+[package]
+name = "balance-payment"
+version = "0.1.0"
+description = "Created with Anchor"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "balance_payment"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = ["anchor-lang/idl-build"]
+
+[dependencies]
+anchor-lang = { version = "0.31.0" }
+anyhow = "1"
+arrayref = "*"
+bs58 = "0.4"
+curve25519-dalek = { version = "4", default-features = false }
+sha2 = "0.10.8"
+solana-zk-token-sdk = "^2.0.2"

@@ -1,0 +1,13 @@
+.env
+.DS_Store
+target
+.anchor
+*.rs.bk
+node_modules
+test-ledger
+.yarn
+bun.lock
+bun.lockb
+package-lock.json
+data
+tmp
