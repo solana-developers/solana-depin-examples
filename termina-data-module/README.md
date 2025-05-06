@@ -32,9 +32,10 @@ This demo simulates a DePIN reward batch upload.
 
 ## Prerequisites
 
-- [Termina CLI](https://docs.termina.technology/documentation/cli/installation)
-- `jq` and `xxd` installed (standard on most Unix systems)
-- Bash-compatible shell (macOS, Linux, or WSL)
+To run this demo, you just need:
+
+- A terminal (macOS, Linux, or WSL on Windows)
+- `jq` and `xxd` installed (used to parse and decode the blob output)
 
 ---
 
