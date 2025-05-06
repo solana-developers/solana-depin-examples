@@ -79,7 +79,7 @@ Run the following to upload the file to Solana via the Data Module:
 ./upload_blob.sh
 ```
 
-You’ll receive one or more blob signatures in response — depending on the file size. These signatures are needed to fetch the blob.
+You’ll receive one or more blob signatures in response, depending on the file size. These signatures are needed to fetch the blob.
 
 ---
 
