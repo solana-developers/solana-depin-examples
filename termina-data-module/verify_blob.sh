@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# this is an example verification logic. Actual validation requirements may vary based on the domain and use case.
 # this script fetches a blob from the Termina Data Module and verifies expected fields exist
 
 PROGRAM_ID="2RWsr92iL39YCLiZu7dZ5hron4oexEMbgWDg35v5U5tH"
