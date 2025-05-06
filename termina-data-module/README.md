@@ -1,15 +1,12 @@
+# Termina Data Module Demo (CLI)
+
 Termina’s Data Module lets teams store structured data blobs directly on Solana, without deploying custom smart contracts.
 
 This is especially useful for DePIN networks that need to publish large sets of device data (like sensor readings or reward snapshots) in a verifiable way. 
 Builders can anchor data with the CLI or Rust SDK, fetch it trustlessly from the chain, and verify its integrity on the client side.
 
-This example shows the full flow: using a simple JSON reward file to demonstrate upload, fetch, and verification.
-
----
-
-# Termina Data Module Demo (CLI)
-
-This example demonstrates how to use Termina’s Data Module to anchor, fetch, and verify real-world data on Solana — without deploying a smart contract.
+This example demonstrates how to use Termina’s Data Module to anchor, fetch, and verify real-world data on Solana without deploying a custom program.
+It shows the full flow using a simple JSON reward file: uploading the blob, fetching it from chain, and verifying its contents locally.
 
 We use the **CLI** here to make the process transparent and reproducible.  
 For production, we recommend the [Rust SDK](https://docs.termina.technology/documentation/sdk/rust-sdk) for deeper integration.

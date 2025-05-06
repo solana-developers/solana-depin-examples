@@ -5,6 +5,12 @@ DePin stands for decentralized physical infrastructure and is a term which descr
 
 ## Examples
 
+### [Termina Data Module (Blob Upload + Verification)](./termina-data-module/README.md)
+
+This example shows how DePIN teams can anchor large batches of device data (e.g., sensor readings and reward summaries) directly on Solana using Termina’s Data Module.
+It demonstrates a full flow using the CLI — from uploading a structured JSON blob, to fetching it from chain, and verifying its contents using a local script.
+[Twitter Video](https://x.com/Terminaxyz/status/1909263420278394899)
+
 ### [Led-Switch](./led-switch/README.md)
 
 This example shows how to use Solana Pay transaction requests to control a LED connected to a Raspberry Pi.
