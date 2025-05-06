@@ -1,7 +1,7 @@
 # Termina Data Module Demo (CLI)
 
 Termina’s Data Module lets teams anchor structured data blobs directly on Solana without custom programs required.
-It’s especially useful for DePIN networks publishing verifiable device data like sensor readings or reward snapshots.
+It’s especially useful for DePIN networks publishing verifiable device data like sensor readings or reward snapshots, in a cost-effective and high-throughput way.
 
 This example uses the CLI to walk through the full flow: upload a JSON reward file, fetch it from chain, and verify its contents locally.
 For production use, we recommend the Rust SDK for tighter integration.
@@ -117,6 +117,8 @@ This script checks that the blob includes:
 * `co2_ppm`
 * `merkle_root`
 * `proof`
+
+> This is an example verification logic. Actual validation requirements may vary based on the domain and use case.
 
 ---
 
