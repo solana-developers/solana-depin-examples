@@ -135,6 +135,18 @@ It covers:
 
 ---
 
+## Crate Links (CLI and Module Components)
+
+The source code for the CLI and related components is published on [crates.io](https://crates.io), and visible to anyone who installs them:
+
+- [nitro-da-cli](https://crates.io/crates/nitro-da-cli)  
+- [nitro-da-client](https://crates.io/crates/nitro-da-client)  
+- [nitro-da-blober](https://crates.io/crates/nitro-da-blober)  
+- [nitro-da-indexer-api](https://crates.io/crates/nitro-da-indexer-api)  
+- [nitro-da-proofs](https://crates.io/crates/nitro-da-proofs)
+
+---
+
 ## License
 
 MIT
