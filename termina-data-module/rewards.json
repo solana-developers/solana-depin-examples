@@ -1,0 +1,23 @@
+{
+    "epoch": 1042,
+    "location": "Zug, Switzerland",
+    "devices": [
+      {
+        "device_id": "sensor-001",
+        "ip": "192.168.0.101",
+        "data_points": 340,
+        "co2_ppm": 417,
+        "reward": "0.03"
+      },
+      {
+        "device_id": "sensor-002",
+        "ip": "192.168.0.102",
+        "data_points": 327,
+        "co2_ppm": 419,
+        "reward": "0.02"
+      }
+    ],
+    "total_reward": "0.05",
+    "merkle_root": "abc123xyz456",
+    "proof": "mock_zk_proof_here"
+  }
