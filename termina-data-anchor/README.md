@@ -6,6 +6,9 @@ It’s especially useful for DePIN networks publishing verifiable device data li
 This example uses the CLI to walk through the full flow: upload a JSON reward file, fetch it from chain, and verify its contents locally.
 For production use, we recommend the Rust SDK for tighter integration.
 
+A quick look at the data flow of the Data Anchor:
+![image](https://github.com/user-attachments/assets/2ea55114-fb30-4f16-a609-f69aa45368b1)
+
 ---
 
 ## What this demo shows
