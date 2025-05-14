@@ -1,6 +1,6 @@
-# Termina Data Module Demo (CLI)
+# Termina Data Anchor Demo (CLI)
 
-Termina’s Data Module lets teams anchor structured data blobs directly on Solana without custom programs required.
+Termina’s Data Anchor lets teams anchor structured data blobs directly on Solana without custom programs required.
 It’s especially useful for DePIN networks publishing verifiable device data like sensor readings or reward snapshots, in a cost-effective and high-throughput way.
 
 This example uses the CLI to walk through the full flow: upload a JSON reward file, fetch it from chain, and verify its contents locally.
@@ -73,7 +73,7 @@ The file `rewards.json` simulates a real batch upload:
 
 ## 2. Upload the blob
 
-Run the following to upload the file to Solana via the Data Module:
+Run the following to upload the file to Solana via the Data Anchor:
 
 ```bash
 ./upload_blob.sh
@@ -125,7 +125,7 @@ This script checks that the blob includes:
 ## Link to official documentation
 
 This demo follows the steps from:
-📖 [Using the Data Module](https://docs.termina.technology/documentation/network-extension-stack/ne-modules/data-module/using-the-data-module)
+📖 [Using the Data Anchor](https://docs.termina.technology/documentation/network-extension-stack/ne-modules/data-anchor/using-the-data-anchor)
 
 It covers:
 
