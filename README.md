@@ -1,4 +1,4 @@
-# Solana DePin Examples
+# Solana DePin & IOT Examples
 
 This repository contains examples of how to use Solana to talk to hardware.
 DePin stands for decentralized physical infrastructure and is a term which describes the use of blockchain technology to manage physical infrastructure.
