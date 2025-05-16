@@ -5,7 +5,7 @@ DePin stands for decentralized physical infrastructure and is a term which descr
 
 ## Examples
 
-### [Data Anchor by Termina (Blob Upload + Verification)](./termina-data-module/README.md)
+### [Data Anchor by Termina (Blob Upload + Verification)](./termina-data-anchor/README.md)
 
 This example shows how DePIN teams can anchor large batches of device data (e.g., sensor readings and reward summaries) directly on Solana using Termina’s Data Anchor.
 It demonstrates a full flow using the CLI from uploading a structured JSON blob, to fetching it from chain, and verifying its contents using a local script.
