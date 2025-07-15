@@ -5,9 +5,9 @@ DePin stands for decentralized physical infrastructure and is a term which descr
 
 ## Examples
 
-### [Reward Distribtution for hardware devices](https://github.com/Woody4618/depin-reward-distributor)
+### [Reward Distribution for hardware devices](https://github.com/Woody4618/depin-reward-distributor)
 
-This example shows how you can use a raspberry pi temperature sensor and reward it with tokens. There is a ed25519 device identifier on the raspberry pi and an off chain oracle collecting the data and saving elegible reward count. For claiming the oracle signs a message that is validated in an Anchor program that distributes the tokens to the device owner. Cost per account is 0.0014 Sol per device. 
+This example demonstrates how you can use a Raspberry Pi temperature sensor and reward it with tokens. There is a Ed25519 device identifier on the raspberry pi and an off chain oracle collecting the data and saving eligible reward count. For claiming the oracle signs a message that is validated in an Anchor program that distributes the tokens to the device owner. Cost per account is 0.0014 Sol per device. 
 
 ### [Data Anchor by Termina (Blob Upload + Verification)](./termina-data-anchor/README.md)
 
