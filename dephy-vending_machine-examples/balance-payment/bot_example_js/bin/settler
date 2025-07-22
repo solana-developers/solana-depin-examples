@@ -1,0 +1,7 @@
+#!/bin/bash
+
+USER=$1
+NONCE=$2
+AMOUNT_TO_TRANSFER=$3
+
+exec bun run /opt/balance-payment-bot/index.ts settle --net devnet --rpc "https://api.devnet.solana.com" --keypair /opt/balance-payment-bot/bot.demo.json --user "$USER" --nonce "$NONCE" --amountToTransfer "$AMOUNT_TO_TRANSFER"

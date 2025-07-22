@@ -1,0 +1,8 @@
+#!/bin/bash
+
+USER=$1
+AMOUNT=$2
+NONCE=$3
+RECOVER_INFO=$4
+
+exec bun run /opt/balance-payment-bot/index.ts check_eligible --net devnet --rpc "https://api.devnet.solana.com" --user "$USER" --amount "$AMOUNT" --nonce "$NONCE" --recoverInfo "$RECOVER_INFO"
