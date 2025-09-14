@@ -50,6 +50,11 @@ It comes with a whole walkthrough of how to setup the sensor, create the api and
 Show Solana real-time data in a little ssd1306 display using the microcontroller esp32 to manage wifi, http request and more.
 [Twitter Video](https://x.com/lich01_/status/1899208452167102621)
 
+### [Memo Reading Fish]([https://github.com/Mantistc/esp32-ssd1306-solana](https://github.com/Woody4618/talking-fish))
+
+A talking fish that can read Solana Memo transactions. 
+[Twitter Video](https://x.com/SolPlay_jonas/status/1966846254207426760)
+
 ### [Solana slot LED-Display](https://github.com/solana-developers/solana-depin-examples/tree/main/Raspberry-LED-display)
 
 This example shows use an LED Display to show the current Solana slot using a Raspberry Pi and a I2C - SSD1306.
